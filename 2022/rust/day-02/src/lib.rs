@@ -1,10 +1,24 @@
+use std::str::FromStr;
+
 // use std::println;
 //
-// enum Hand {
-//     Rock,
-//     Paper,
-//     Scissor,
-// }
+enum Move {
+    Rock = 1,
+    Paper = 2,
+    Scissor = 3,
+}
+impl FromStr for Move {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "A" | "X" => Ok(Move::Rock),
+            "B" | "Y" => Ok(Move::Paper),
+            "C" | "Z" => Ok(Move::Scissor),
+            _ => Err("Not a know move".to_string()),
+        }
+    }
+}
+
 //
 // fn get_move_score(letter: &char) -> u8 {
 //     if 'A' == *letter || 'X' == *letter {
@@ -16,17 +30,15 @@
 //     }
 // }
 
-use std::println;
-
 pub fn process_part1(input: &str) -> String {
-    let resualt = input
-        .lines()
-        .filter_map(|line| line.parse::<String>().ok())
-        .collect::<Vec<_>>();
-    let _a = resualt.iter().map(|a| {
-        println!("{}", a);
-        a.split_whitespace()
+    let resualt = input.lines().map(|l| {
+        let moves: Vec<Move> = l
+            .split(' ')
+            .map(|s| s.parse::<Move>().unwrap())
+            .collect::<Vec<_>>();
+        moves
     });
+    println!("{:#?}", resualt);
     "".to_string()
 }
 

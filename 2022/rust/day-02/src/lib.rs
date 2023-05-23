@@ -1,9 +1,32 @@
+// use std::println;
+//
+// enum Hand {
+//     Rock,
+//     Paper,
+//     Scissor,
+// }
+//
+// fn get_move_score(letter: &char) -> u8 {
+//     if 'A' == *letter || 'X' == *letter {
+//         1
+//     } else if 'B' == *letter || 'Y' == *letter {
+//         2
+//     } else {
+//         3
+//     }
+// }
+
+use std::println;
+
 pub fn process_part1(input: &str) -> String {
     let resualt = input
         .lines()
         .filter_map(|line| line.parse::<String>().ok())
         .collect::<Vec<_>>();
-
+    let _a = resualt.iter().map(|a| {
+        println!("{}", a);
+        a.split_whitespace()
+    });
     "".to_string()
 }
 

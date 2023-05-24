@@ -1,43 +1,50 @@
-use std::println;
-
-fn get_move_score(letter: &char) -> u128 {
-    if 'A' == *letter || 'X' == *letter {
-        1
-    } else if 'B' == *letter || 'Y' == *letter {
-        2
-    } else {
-        3
+fn get_move_score(letter: char) -> u64 {
+    match letter {
+        'A' | 'X' => 1,
+        'B' | 'Y' => 2,
+        _ => 3,
     }
 }
 
 pub fn process_part1(input: &str) -> String {
-    let resualt = input.lines().map(|l| {
-        let opp = l.chars().next().unwrap();
-        let me = l.chars().nth(2).unwrap();
-        let me_num = get_move_score(&me);
-        let opp_num = get_move_score(&opp);
-        if (me_num + 1) % 3 == opp_num {
-            me_num
-        } else if me_num == opp_num {
-            3 + me_num
-        } else {
-            6 + me_num
-        }
-    });
+    let resualt: u64 = input
+        .lines()
+        .map(|l| {
+            let opp = l.chars().next().unwrap();
+            let me = l.chars().nth(2).unwrap();
+            let me_num = get_move_score(me);
+            let opp_num = get_move_score(opp);
+            if (me_num % 3) + 1 == opp_num {
+                me_num
+            } else if me_num == opp_num {
+                3 + me_num
+            } else {
+                6 + me_num
+            }
+        })
+        .sum();
 
-    let mut my_sum: u128 = 0;
-    for n in resualt {
-        my_sum += n
-    }
-    my_sum.to_string()
+    resualt.to_string()
 }
 
 pub fn process_part2(input: &str) -> String {
-    let resualt = input
+    let resualt: u64 = input
         .lines()
-        .filter_map(|line| line.parse::<String>().ok())
-        .collect::<Vec<_>>();
-    "".to_string()
+        .map(|l| {
+            let opp = l.chars().next().unwrap();
+            let me = l.chars().nth(2).unwrap();
+            let me_num = get_move_score(me);
+            let opp_num = get_move_score(opp);
+            match me {
+                'X' => (me_num % 3) + 1,
+                'Y' => 3 + opp_num,
+                'Z' => (opp_num % 3) + 6,
+                _ => 0,
+            }
+        })
+        .sum();
+
+    resualt.to_string()
 }
 //Note..
 //me : X(roc), Y(paper), Z(scissor)
@@ -51,18 +58,17 @@ mod tests {
 
     const INPUT: &str = "A Y
 B X
-A Z
 C Z";
 
     #[test]
     fn part1_works() {
         let result = process_part1(INPUT);
-        assert_eq!(result, "18");
+        assert_eq!(result, "15");
     }
 
-    // #[test]
-    // fn part2_works() {
-    //     let result = process_part2(INPUT);
-    //     assert_eq!(result, "45000");
-    // }
+    #[test]
+    fn part2_works() {
+        let result = process_part2(INPUT);
+        assert_eq!(result, "12");
+    }
 }

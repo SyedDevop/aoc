@@ -1,45 +1,35 @@
-use std::str::FromStr;
+use std::println;
 
-// use std::println;
-//
-enum Move {
-    Rock = 1,
-    Paper = 2,
-    Scissor = 3,
-}
-impl FromStr for Move {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "A" | "X" => Ok(Move::Rock),
-            "B" | "Y" => Ok(Move::Paper),
-            "C" | "Z" => Ok(Move::Scissor),
-            _ => Err("Not a know move".to_string()),
-        }
+fn get_move_score(letter: &char) -> u128 {
+    if 'A' == *letter || 'X' == *letter {
+        1
+    } else if 'B' == *letter || 'Y' == *letter {
+        2
+    } else {
+        3
     }
 }
 
-//
-// fn get_move_score(letter: &char) -> u8 {
-//     if 'A' == *letter || 'X' == *letter {
-//         1
-//     } else if 'B' == *letter || 'Y' == *letter {
-//         2
-//     } else {
-//         3
-//     }
-// }
-
 pub fn process_part1(input: &str) -> String {
     let resualt = input.lines().map(|l| {
-        let moves: Vec<Move> = l
-            .split(' ')
-            .map(|s| s.parse::<Move>().unwrap())
-            .collect::<Vec<_>>();
-        moves
+        let opp = l.chars().next().unwrap();
+        let me = l.chars().nth(2).unwrap();
+        let me_num = get_move_score(&me);
+        let opp_num = get_move_score(&opp);
+        if (me_num + 1) % 3 == opp_num {
+            me_num
+        } else if me_num == opp_num {
+            3 + me_num
+        } else {
+            6 + me_num
+        }
     });
-    println!("{:#?}", resualt);
-    "".to_string()
+
+    let mut my_sum: u128 = 0;
+    for n in resualt {
+        my_sum += n
+    }
+    my_sum.to_string()
 }
 
 pub fn process_part2(input: &str) -> String {
@@ -61,12 +51,13 @@ mod tests {
 
     const INPUT: &str = "A Y
 B X
+A Z
 C Z";
 
     #[test]
     fn part1_works() {
         let result = process_part1(INPUT);
-        assert_eq!(result, "15");
+        assert_eq!(result, "18");
     }
 
     // #[test]

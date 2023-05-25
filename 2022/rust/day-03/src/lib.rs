@@ -14,15 +14,26 @@ pub fn process_part1(input: &str) -> String {
         .fold(0, |acc, line| {
             let srt_len = line.len();
             let (part_one, part_two) = line.split_at(srt_len / 2);
-            let a: String = part_one.chars().filter(|c| part_two.contains(*c)).collect();
-            acc + code_for_char(a.chars().next().unwrap())
+            let a = part_one.chars().find(|c| part_two.contains(*c)).unwrap();
+            acc + code_for_char(a)
         });
 
     resualt.to_string()
 }
 
 pub fn process_part2(input: &str) -> String {
-    let resualt = input;
+    let resualt: u32 = input
+        .lines()
+        .collect::<Vec<_>>()
+        .chunks(3)
+        .map(|para| {
+            para[0]
+                .chars()
+                .find(|b| para[1].contains(*b) && para[2].contains(*b))
+                .unwrap()
+        })
+        .map(code_for_char)
+        .sum();
     resualt.to_string()
 }
 
@@ -44,7 +55,6 @@ CrZsJsPPZsGzwwsLwLmpwMDw";
     }
 
     #[test]
-    #[ignore]
     fn part2_works() {
         let result = process_part2(INPUT);
         assert_eq!(result, "12");

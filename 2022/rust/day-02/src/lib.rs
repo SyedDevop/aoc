@@ -33,12 +33,17 @@ pub fn process_part2(input: &str) -> String {
         .map(|l| {
             let opp = l.chars().next().unwrap();
             let me = l.chars().nth(2).unwrap();
-            let me_num = get_move_score(me);
             let opp_num = get_move_score(opp);
             match me {
-                'X' => (me_num % 3) + 1,
+                'X' => {
+                    if opp_num == 2 {
+                        1
+                    } else {
+                        opp_num % 3 + 2
+                    }
+                }
                 'Y' => 3 + opp_num,
-                'Z' => (opp_num % 3) + 6,
+                'Z' => (opp_num % 3) + 7,
                 _ => 0,
             }
         })

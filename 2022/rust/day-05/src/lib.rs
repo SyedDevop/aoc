@@ -1,27 +1,86 @@
 use std::collections::HashMap;
-use std::println;
+use std::str::FromStr;
+
+#[derive(Debug)]
+struct MoveCreate {
+    count: usize,
+    from: usize,
+    to: usize,
+}
+
+impl FromStr for MoveCreate {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut proceeder_list = s.split(' ');
+        Ok(Self {
+            count: proceeder_list.nth(1).unwrap().parse::<usize>().unwrap(),
+            from: proceeder_list.nth(1).unwrap().parse::<usize>().unwrap(),
+            to: proceeder_list.nth(1).unwrap().parse::<usize>().unwrap(),
+        })
+    }
+}
 
 pub fn process_part1(input: &str) -> String {
-    let resualt = input.lines().collect::<Vec<_>>();
-    let mut creat_list: HashMap<u16, Vec<char>> = HashMap::new();
+    let lines = input.lines().collect::<Vec<_>>();
+    let mut creat_list: HashMap<usize, Vec<char>> = HashMap::new();
 
-    println!("{:#?}", &resualt[0..8]);
-    for (i, line) in resualt[0..8].iter().enumerate() {
-        let mut a: Vec<char> = vec![];
-        for x in (1..line.len()).step_by(4) {
-            let v: char = line.chars().collect::<Vec<char>>()[x];
-            a.push(v);
+    for (i, x) in (1..lines[0].len()).step_by(4).enumerate() {
+        for line in lines.iter().take(8) {
+            if let Some(ch) = line.chars().nth(x) {
+                if ch != ' ' {
+                    creat_list.entry(i + 1).or_insert_with(Vec::new).push(ch);
+                }
+            }
         }
-        creat_list.insert(i as u16 + 1, a);
+        creat_list.get_mut(&(i + 1)).unwrap().reverse();
     }
-    println!("{:?}", creat_list);
-    "".to_string()
+
+    let move_create = lines[10..]
+        .iter()
+        .filter_map(|a| a.parse::<MoveCreate>().ok());
+
+    for m in move_create {
+        (0..m.count).for_each(|_| {
+            let lat = creat_list.get_mut(&m.from).unwrap().pop().unwrap();
+            creat_list.get_mut(&m.to).unwrap().push(lat)
+        })
+    }
+    (1..=9)
+        .map(|c| creat_list.get(&c).unwrap().last().unwrap())
+        .collect::<String>()
 }
 
 pub fn process_part2(input: &str) -> String {
-    let resualt = input;
+    let lines = input.lines().collect::<Vec<_>>();
+    let mut creat_list: HashMap<usize, Vec<char>> = HashMap::new();
 
-    resualt.to_string()
+    for (i, x) in (1..lines[0].len()).step_by(4).enumerate() {
+        for line in lines.iter().take(8) {
+            if let Some(ch) = line.chars().nth(x) {
+                if ch != ' ' {
+                    creat_list.entry(i + 1).or_insert_with(Vec::new).push(ch);
+                }
+            }
+        }
+        creat_list.get_mut(&(i + 1)).unwrap().reverse();
+    }
+
+    let move_create = lines[10..]
+        .iter()
+        .filter_map(|a| a.parse::<MoveCreate>().ok());
+
+    for m in move_create {
+        let from_list = creat_list.get_mut(&m.from).unwrap();
+
+        let mut lat = from_list
+            .drain((from_list.len() - m.count)..)
+            .collect::<Vec<_>>();
+        creat_list.get_mut(&m.to).unwrap().append(&mut lat)
+    }
+    (1..=9)
+        .map(|c| creat_list.get(&c).unwrap().last().unwrap())
+        .collect::<String>()
 }
 
 #[cfg(test)]

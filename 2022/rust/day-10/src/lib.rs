@@ -68,17 +68,14 @@ pub fn process_part1(input: &str) -> String {
 pub fn process_part2(input: &str) -> String {
     let mut pros = Process { x: 1, clock: 0 };
     let (_, excu) = parser_execution(input).unwrap();
-    let mut sprite = 1..3;
     let mut img: String = "".to_string();
 
-    for (_, ins) in excu.iter().enumerate() {
+    for ins in excu.iter() {
+        let sprite = (pros.x)..(pros.x + 3);
         match ins {
             Noop => {
                 pros.clock += 1;
-                if pros.clock == 40 {
-                    pros.clock = 0;
-                }
-                if sprite.contains(&pros.clock) {
+                if sprite.contains(&(pros.clock % 40)) {
                     img.push('#')
                 } else {
                     img.push('.')
@@ -87,18 +84,13 @@ pub fn process_part2(input: &str) -> String {
             Addx(value) => {
                 for _ in 0..=1 {
                     pros.clock += 1;
-
-                    if pros.clock == 40 {
-                        pros.clock = 0;
-                    }
-                    if sprite.contains(&pros.clock) {
+                    if sprite.contains(&(pros.clock % 40)) {
                         img.push('#')
                     } else {
                         img.push('.')
-                    }
+                    };
                 }
                 pros.x += value;
-                sprite = (pros.x)..(pros.x + 3);
             }
         }
     }

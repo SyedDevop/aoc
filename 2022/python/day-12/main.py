@@ -90,6 +90,45 @@ def algorithm(grid: Grid, maze: Maze, start: Tuple[int, int], end: Tuple[int, in
     return 0.0
 
 
+def dijkstra(grid: Grid, maze: Maze, start: Tuple[int, int], end: Tuple[int, int]):
+    open_set = PriorityQueue()  # type: ignore
+    open_set.put((0, start))
+    came_from = {}  # type: ignore
+    g_score = {spot: float("inf") for row in grid for spot in row}
+    g_score[start] = 0
+    open_set_hash = {start}
+    while not open_set.empty():
+        current = open_set.get()[1]
+        open_set_hash.remove(current)
+
+        # if current == end:
+        #     path = []
+        #     while current in came_from:
+        #         current = came_from[current]
+        #         path.append(current)
+        #     path.reverse()
+        #     return path.__len__()
+
+        for neighbor in get_neighbors(current, maze):
+            temp_g_score = g_score[current] + 1
+
+            if temp_g_score < g_score[neighbor]:
+                came_from[current] = neighbor
+                g_score[neighbor] = temp_g_score
+                if neighbor not in open_set_hash:
+                    open_set.put((g_score[neighbor], neighbor))
+                    open_set_hash.add(neighbor)
+    cur = (5, 3)
+    path = []
+    print(cur)
+    print(came_from.__len__())
+    while cur in came_from:
+        cur = came_from[cur]
+        path.append(cur)
+    print(path.__len__())
+    return
+
+
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
@@ -127,14 +166,14 @@ def part_two(data: str):
             grid[y].append((x, y))
 
     if start and end:
-        maze[start[1]][start[0]] = "a"
-        maze[end[1]][end[0]] = "z"
-        return algorithm(grid, maze, start, end)
+        maze[start[1]][start[0]] = "z"
+        maze[end[1]][end[0]] = "a"
+        return dijkstra(grid, maze, start, end)
     return 0
 
 
-with open("./input.txt", "r") as file:
-    print(part_one(file.read()))
+# with open("./input.txt", "r") as file:
+#     print(part_one(file.read()))
 
 
 # {Test}
@@ -145,9 +184,11 @@ acctuvwj
 abdefghi"""
 
 
-def test_part_one():
-    ans = part_one(INPUT)
-    assert ans == 31
+# def test_part_one():
+#     ans = part_one(INPUT)
+#     assert ans == 31
+
+part_two(INPUT)
 
 
 def test_part_two():

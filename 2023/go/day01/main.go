@@ -3,7 +3,6 @@ package main
 import (
 	_ "embed"
 	"fmt"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -14,7 +13,7 @@ var input string
 func init() {
 	input = strings.TrimRight(input, "\n")
 	if len(input) == 0 {
-		panic("empty input.txt file")
+		panic("empty input file")
 	}
 }
 
@@ -24,31 +23,25 @@ func main() {
 }
 
 func part1(input []string) int {
-	var nums []string
+	// var nums []string
 	sum := 0
-	for x, v := range input {
+
+	for _, v := range input {
+		first := -1
+		last := -1
 		for _, a := range v {
 			if unicode.IsNumber(a) {
-				nums = append(nums, string(a))
-				break
+				if first == -1 {
+					first = (int(a) - '0')
+					// last = int(a)
+				}
+				last = (int(a) - '0')
+
 			}
 		}
 
-		for i := len(v) - 1; i >= 0; i-- {
-			curChar := v[i]
-			if unicode.IsNumber(rune(curChar)) {
-				nums[x] += string(v[i])
-				break
-			}
-		}
+		sum += (first * 10) + last
 	}
-
-	for _, num := range nums {
-		if intVar, err := strconv.Atoi(num); err == nil {
-			sum += intVar
-		}
-	}
-
 	return sum
 }
 func part2(input []string) int { return 0 }

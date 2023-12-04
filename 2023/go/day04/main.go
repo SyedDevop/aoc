@@ -34,20 +34,21 @@ func part1(input []string) int {
 		roungScore := 0
 		cardsBody := strings.Split(line, ": ")
 
-		cards := strings.Split(cardsBody[1], " | ")
+		cards := strings.Split(cardsBody[1], " |")
 		winNumber := strings.Split(cards[0], " ")
-		myNumber := cards[1]
+		myNumber := cards[1] + " "
 
-		fmt.Println(cardsBody[0])
 		for _, RawNum := range winNumber {
 			num := strings.TrimSpace(RawNum)
 			if !isNumeric(num) {
 				continue
 			}
+			if len(num) == 1 {
+				num = " " + num + " "
+			}
 			isMatch := strings.Contains(myNumber, num)
 
 			if isMatch {
-				fmt.Printf("Found the num: %s\n", num)
 				if roungScore == 0 {
 					roungScore = 1
 				} else {

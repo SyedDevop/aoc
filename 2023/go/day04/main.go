@@ -31,6 +31,14 @@ func parseCards(line string) (winingNumbers []string, myNumbers string) {
 	return winNumber, myNumber
 }
 
+func sum(nums []int) int {
+	numSum := 0
+	for i := 0; i < len(nums); i++ {
+		numSum = numSum + nums[i]
+	}
+	return numSum
+}
+
 func cardNumWone(numbers, n string) bool {
 	num := strings.TrimSpace(n)
 	if !isNumeric(num) {
@@ -40,6 +48,14 @@ func cardNumWone(numbers, n string) bool {
 		num = " " + num + " "
 	}
 	return strings.Contains(numbers, num)
+}
+
+func defaultValueArray(length, value int) []int {
+	s := make([]int, length)
+	for i := range s {
+		s[i] = value
+	}
+	return s
 }
 
 func main() {
@@ -72,8 +88,7 @@ func part1(input []string) int {
 }
 
 func part2(input []string) int {
-	rounds := make(map[int]int)
-
+	allRoundCount := defaultValueArray(len(input), 1)
 	for carNum, cardValue := range input {
 		winingNumbers, myNumbers := parseCards(cardValue)
 		roundScore := 0
@@ -83,18 +98,12 @@ func part2(input []string) int {
 				roundScore++
 			}
 		}
-		rounds[carNum+1] = roundScore
-	}
-
-	fmt.Println(rounds)
-	for index, val := range rounds {
-		for i := index + 1; i <= val; i++ {
-			rounds[i]++
+		for j := 1; j <= roundScore; j++ {
+			allRoundCount[carNum+j] += allRoundCount[carNum]
 		}
 	}
 
-	fmt.Println(rounds)
-	return 0
+	return sum(allRoundCount)
 }
 
 func parseInput(input string) []string {

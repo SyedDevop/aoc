@@ -16,12 +16,6 @@ func TestA(t *testing.T) {
 	require.Equal(t, 23235, result)
 }
 
-func BenchmarkA(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = part1(parseInput(input))
-	}
-}
-
 func TestB(t *testing.T) {
 	// 	input := `Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 	// Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
@@ -32,11 +26,5 @@ func TestB(t *testing.T) {
 
 	result := part2(parseInput(input))
 
-	require.Equal(t, 5883416, result)
-}
-
-func BenchmarkB(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = part2(parseInput(input))
-	}
+	require.Equal(t, 5920640, result)
 }

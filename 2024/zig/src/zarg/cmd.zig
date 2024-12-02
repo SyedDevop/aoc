@@ -2,8 +2,19 @@ const std = @import("std");
 const Allocator = std.mem.Allocator;
 
 pub const CmdName = enum {
-    @"01",
     root,
+    @"01",
+    @"02",
+    @"03",
+    @"04",
+    @"05",
+    @"06",
+    @"07",
+    @"08",
+    @"09",
+    @"10",
+    @"11",
+    @"12",
 
     pub fn getCmdNameList(alloc: Allocator) ![]const u8 {
         var result = std.ArrayList(u8).init(alloc);
@@ -99,6 +110,72 @@ const cmdList: []const Cmd = &.{
         .name = .@"01",
         .usage = "zaoc 01",
         .info = "This command run's for day 01",
+        .options = null,
+    },
+    .{
+        .name = .@"02",
+        .usage = "zaoc 02",
+        .info = "This command run's for day 02",
+        .options = null,
+    },
+    .{
+        .name = .@"03",
+        .usage = "zaoc 03",
+        .info = "This command run's for day 03",
+        .options = null,
+    },
+    .{
+        .name = .@"04",
+        .usage = "zaoc 04",
+        .info = "This command run's for day 04",
+        .options = null,
+    },
+    .{
+        .name = .@"05",
+        .usage = "zaoc 05",
+        .info = "This command run's for day 06",
+        .options = null,
+    },
+    .{
+        .name = .@"06",
+        .usage = "zaoc 06",
+        .info = "This command run's for day 06",
+        .options = null,
+    },
+    .{
+        .name = .@"07",
+        .usage = "zaoc 07",
+        .info = "This command run's for day 07",
+        .options = null,
+    },
+    .{
+        .name = .@"08",
+        .usage = "zaoc 08",
+        .info = "This command run's for day 08",
+        .options = null,
+    },
+    .{
+        .name = .@"09",
+        .usage = "zaoc 09",
+        .info = "This command run's for day 09",
+        .options = null,
+    },
+    .{
+        .name = .@"10",
+        .usage = "zaoc 10",
+        .info = "This command run's for day 10",
+        .options = null,
+    },
+    .{
+        .name = .@"11",
+        .usage = "zaoc 11",
+        .info = "This command run's for day 11",
+        .options = null,
+    },
+    .{
+        .name = .@"12",
+        .usage = "zaoc 12",
+        .info = "This command run's for day 12",
         .options = null,
     },
 };

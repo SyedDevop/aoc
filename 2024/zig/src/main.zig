@@ -5,6 +5,7 @@ const Allocator = std.mem.Allocator;
 const Cli = zarg.Cli;
 
 const day01 = @import("./day/day01.zig");
+const day02 = @import("./day/day02.zig");
 const Day = @import("./day/day.zig");
 const VERSION = "2024+1";
 const USAGE =
@@ -32,10 +33,20 @@ pub fn main() !void {
         .root => {
             const d01 = try day01.init(allocator, dayOpt);
             try d01.run();
+            const d02 = try day02.init(allocator, dayOpt);
+            try d02.run();
         },
         .@"01" => {
             const d01 = try day01.init(allocator, dayOpt);
             try d01.run();
+        },
+
+        .@"02" => {
+            const d02 = try day02.init(allocator, dayOpt);
+            try d02.run();
+        },
+        else => {
+            std.debug.print("Day {s} not implemented", .{@tagName(cli.cmd.name)});
         },
     }
 }
